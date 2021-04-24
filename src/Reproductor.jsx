@@ -2,7 +2,7 @@ import { useAudio } from 'react-use';
 import styles from './Reproductor.module.css';
 
 const Reproductor = ({ source, name, album }) => {
-	const [ audio, state, controls, ref ] = useAudio({
+	const [ audio, state, controls ] = useAudio({
 		src: source,
 		autoPlay: true
 	});
