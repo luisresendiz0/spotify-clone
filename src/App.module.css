@@ -1,0 +1,13 @@
+.nav {
+  background: #1db954;
+  width: 100%;
+  padding: 1rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+.link {
+  text-decoration: none;
+  color: #fff;
+  margin-right: 1rem;
+}

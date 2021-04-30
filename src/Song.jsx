@@ -1,30 +1,35 @@
-import randomColor from 'randomcolor';
-import styles from './Search.module.css';
+import { useContext } from "react";
+import { currentSongContext } from "./context/currentSongContext";
+import { useFavorites } from "./context/favoritesContext";
+import styles from "./Song.module.css";
 
-const Song = ({ song, setCurrentSong = () => {}, favoriteSongs, setFavoriteSongs }) => {
-	const addToFavoriteSongs = () => {
-		console.log(song.id);
-		const exist = favoriteSongs.includes(song);
+const Song = ({ song }) => {
+  const { setCurrentSong } = useContext(currentSongContext);
+  const { favoriteSongs, setFavoriteSongs } = useFavorites();
 
-		if (!exist) {
-			setFavoriteSongs([ ...favoriteSongs, song ]);
-		}
-	};
+  const addToFavoriteSongs = () => {
+    if (!favoriteSongs.includes(song)) {
+      setFavoriteSongs([...favoriteSongs, song]);
+    }
+  };
 
-	return (
-		<div
-			className={styles.song}
-			style={{
-				backgroundColor: randomColor()
-			}}
-		>
-			<h3>
-				{song.name} - {song.albumName}
-			</h3>
-			<button onClick={() => setCurrentSong(song)}>play</button>
-			<button onClick={addToFavoriteSongs}>favorite</button>
-		</div>
-	);
+  const removeFromFavorites = () => {
+    setFavoriteSongs(favoriteSongs.filter((fs) => fs.id !== song.id));
+  };
+
+  return (
+    <div
+      className={styles.song}
+      style={{
+        backgroundColor: song.colorBg,
+      }}
+    >
+      <h3>{song.name}</h3>
+      <button onClick={() => setCurrentSong(song)}>play</button>
+      <button onClick={addToFavoriteSongs}>favorite</button>
+      <button onClick={removeFromFavorites}>remove</button>
+    </div>
+  );
 };
 
 export default Song;

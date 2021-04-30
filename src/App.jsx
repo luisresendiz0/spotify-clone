@@ -1,33 +1,37 @@
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-import Search from './Search';
-import Home from './Home';
-import { useEffect, useState } from 'react';
-
-const initialState = JSON.parse(localStorage.getItem('favoritos') || '[]');
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import Search from "./Search";
+import Favorites from "./Favorites";
+import styles from "./App.module.css";
+import { CurrentSongProvider } from "./context/currentSongContext";
+import Reproductor from "./Reproductor";
+import { FavoritesProvider } from "./context/favoritesContext";
 
 const App = () => {
-	const [ favoriteSongs, setFavoriteSongs ] = useState(initialState);
-	//const [ favoriteSongs, setFavoriteSongs ] = useLocalStorage('favoritos', []);
-	useEffect(
-		() => {
-			localStorage.setItem('favoritos', JSON.stringify(favoriteSongs));
-		},
-		[ favoriteSongs ]
-	);
-	return (
-		<Router>
-			<Link to="/">Home</Link>
-			<Link to="/search">Search</Link>
-			<Switch>
-				<Route exact path="/">
-					<Home favoriteSongs={favoriteSongs} />
-				</Route>
-				<Route path="/search">
-					<Search favoriteSongs={favoriteSongs} setFavoriteSongs={setFavoriteSongs} />
-				</Route>
-			</Switch>
-		</Router>
-	);
+  return (
+    <FavoritesProvider>
+      <CurrentSongProvider>
+        <Router>
+          <nav className={styles.nav}>
+            <Link to="/favorites" className={styles.link}>
+              Favorites
+            </Link>
+            <Link className={styles.link} to="/search">
+              Search
+            </Link>
+          </nav>
+          <Switch>
+            <Route path="/favorites">
+              <Favorites />
+            </Route>
+            <Route path="/search">
+              <Search />
+            </Route>
+          </Switch>
+        </Router>
+        <Reproductor />
+      </CurrentSongProvider>
+    </FavoritesProvider>
+  );
 };
 
 export default App;
